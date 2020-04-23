@@ -8,14 +8,14 @@ var NoteItem = mongoose.model('NoteItem', noteItemSchema);
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    NoteItem.estimatedDocumentCount((err, data_size) => {
-        const frame_size = parseInt(req.query.frame_size);
-        const size = (frame_size < data_size) ? frame_size : data_size;
-        NoteItem.aggregate([{$sample: {size: size}}], (err, items) => {
-            if (err) return console.error(err);
-            res.json(items);
-        });
+  NoteItem.estimatedDocumentCount((err, data_size) => {
+    const frame_size = parseInt(req.query.frame_size);
+    const size = (frame_size < data_size) ? frame_size : data_size;
+    NoteItem.aggregate([{$sample: {size: size}}], (err, items) => {
+      if (err) return console.error(err);
+      res.json(items);
     });
+  });
 });
 
 module.exports = router;

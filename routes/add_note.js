@@ -7,12 +7,12 @@ var NoteItem = mongoose.model('NoteItem', noteItemSchema);
 
 /* GET users listing. */
 router.post('/', function(req, res, next) {
-    var obj = {content: req.body.content};
-    var new_note = NoteItem(obj);
-    new_note.save((err, obj) => {
-        if (err) throw err;
-        res.json(obj);
-    });
+  var obj = {content: req.body.content};
+  var new_note = NoteItem(obj);
+  new_note.save((err, obj) => {
+    if (err) throw err;
+    res.end();
+  });
 });
 
 module.exports = router;
