@@ -18,4 +18,21 @@ router.get('/', function(req, res, next) {
   });
 });
 
+router.post('/', function(req, res, next) {
+  var obj = {content: req.body.content};
+  var new_note = NoteItem(obj);
+  new_note.save((err, obj) => {
+    if (err) throw err;
+    res.end();
+  });
+});
+
+router.delete('/:id', function(req, res, next) {
+  console.log(req.param.id)
+  NoteItem.findByIdAndDelete(req.params.id, (err, users) => {
+    if (err) return console.error(err);
+    res.end();
+  });
+});
+
 module.exports = router;
