@@ -3,6 +3,7 @@ var cors = require('cors');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var accessControl = require('./middleware');
 
 var noteController = require('./routes/noteController');
 
@@ -24,7 +25,9 @@ app.use(cors());
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser())
+app.use(cookieParser());
+
+app.use(accessControl);
 
 app.use('/notes', noteController);
 //app.use('/notes', add_note);
