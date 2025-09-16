@@ -7,15 +7,16 @@ require('../database/connect_to_mongo')();
 var NoteItem = mongoose.model('NoteItem', noteItemSchema);
 
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  NoteItem.estimatedDocumentCount((err, data_size) => {
+router.get('/', async function(req, res, next) {
+  try {
+    const data_size = await NoteItem.estimatedDocumentCount();
     const frame_size = parseInt(req.query.frame_size);
     const size = (frame_size < data_size) ? frame_size : data_size;
-    NoteItem.aggregate([{$sample: {size: size}}], (err, items) => {
-      if (err) return console.error(err);
-      res.json(items);
-    });
-  });
+    const items = await NoteItem.aggregate([{$sample: {size: size}}]);
+    res.json(items);
+  } catch (err) {
+    next(err);
+  }
 });
 
 router.post('/', function(req, res, next) {
