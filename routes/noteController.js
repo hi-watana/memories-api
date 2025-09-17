@@ -19,21 +19,24 @@ router.get('/', async function(req, res, next) {
   }
 });
 
-router.post('/', function(req, res, next) {
-  var obj = {content: req.body.content};
-  var new_note = NoteItem(obj);
-  new_note.save((err, obj) => {
-    if (err) throw err;
-    res.end();
-  });
+router.post('/', async function(req, res, next) {
+  try {
+    var obj = {content: req.body.content};
+    var new_note = NoteItem(obj);
+    const saved_note = await new_note.save();
+    res.json(saved_note);
+  } catch (err) {
+    next(err);
+  }
 });
 
-router.delete('/:id', function(req, res, next) {
-  console.log(req.param.id)
-  NoteItem.findByIdAndDelete(req.params.id, (err, users) => {
-    if (err) return console.error(err);
-    res.end();
-  });
+router.delete('/:id', async function(req, res, next) {
+  try {
+    await NoteItem.findByIdAndDelete(req.params.id);
+    res.status(204).end();
+  } catch (err) {
+    next(err);
+  }
 });
 
 module.exports = router;
